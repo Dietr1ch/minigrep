@@ -1,18 +1,19 @@
 use clap::Parser;
+use std::fs;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
-    #[arg(short, long)]
+    #[arg()]
     query: String,
 
-    #[arg(short, long)]
+    #[arg()]
     file_path: String,
 }
 
 fn main() {
     let args = Args::parse();
 
-    println!("minigrep");
-    println!("{:?}", args);
+    let text = fs::read_to_string(args.file_path).expect("Failed to read file");
+    println!("Text:\n{}", text);
 }
