@@ -12,7 +12,7 @@ struct Args {
     query: String,
 
     #[arg()]
-    file_path: String,
+    file_paths: Vec<String>,
 }
 
 fn main() {
@@ -20,6 +20,8 @@ fn main() {
     let args = Args::parse();
     debug!("Args: {:?}", args);
 
-    let text = fs::read_to_string(args.file_path).expect("Failed to read file");
-    println!("Text:\n{}", text);
+    for file_path in args.file_paths {
+        let text = fs::read_to_string(file_path).expect("Failed to read file");
+        println!("Text:\n{}", text);
+    }
 }
