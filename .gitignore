@@ -1,0 +1,8 @@
+# Unix
+.*
+
+# Git
+!.gitignore
+
+# Rust
+/target
