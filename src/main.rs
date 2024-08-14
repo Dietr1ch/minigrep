@@ -3,6 +3,8 @@ extern crate pretty_env_logger;
 extern crate log;
 
 use clap::Parser;
+use color_print::cformat;
+use regex::Regex;
 use std::fs;
 
 #[derive(Parser, Debug)]
@@ -20,8 +22,21 @@ fn main() {
     let args = Args::parse();
     debug!("Args: {:?}", args);
 
+    let highlight = cformat!("<red>{}</red>", &args.query);
+    let re = Regex::new(&args.query).unwrap();
+
     for file_path in args.file_paths {
-        let text = fs::read_to_string(file_path).expect("Failed to read file");
-        println!("Text:\n{}", text);
+        let text = fs::read_to_string(&file_path).expect("Failed to read file");
+
+        for (line_number, line) in text.lines().enumerate() {
+            if re.is_match(line) {
+                println!(
+                    "{}:{}| {}",
+                    file_path,
+                    line_number,
+                    re.replace_all(line, &highlight)
+                );
+            }
+        }
     }
 }
