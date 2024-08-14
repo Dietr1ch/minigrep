@@ -38,6 +38,8 @@
                 {
                   # https://devenv.sh/reference/options/
                   packages = with pkgs; [
+                    hyperfine
+
                     # Rust
                     bacon
                   ];

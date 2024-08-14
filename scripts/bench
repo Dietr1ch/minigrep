@@ -1,0 +1,15 @@
+#!/usr/bin/env fish
+
+set -l WARMUP 10
+set -l QUERY "main"
+set -l FILES "src/main.rs"
+
+# List of tools to test
+set -l -a TOOLS "./target/release/minigrep"
+set -l -a TOOLS "$(which grep) --color"
+set -l -a TOOLS "$(which grep)"
+
+for tool in $TOOLS
+    echo "Testing '$tool'"
+    hyperfine --warmup $WARMUP --shell 'none' "$tool $QUERY $FILES"
+end
