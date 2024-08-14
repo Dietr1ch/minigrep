@@ -1,0 +1,11 @@
+#+title: minigrep
+
+* Info
+My take on a mini-project from the [[https://doc.rust-lang.org/book/ch12-00-an-io-project.html][I/O project on the rust book]].
+
+** Highlights
+- Uses [[https://docs.rs/clap/][clap]] to parse arguments
+  - This made me stray away a bit
+- Uses [[https://docs.rs/pretty_env_logger/][pretty_env_logger]] to log
+- Uses [[https://docs.rs/re/][re]] to match and highlight matches
+- Uses [[https://github.com/sharkdp/hyperfine][hyperfine]] to test it against ~grep --color~
