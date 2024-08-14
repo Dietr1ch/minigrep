@@ -22,7 +22,7 @@ fn main() {
     let args = Args::parse();
     debug!("Args: {:?}", args);
 
-    let highlight = cformat!("<red>{}</red>", &args.query);
+    let highlight = cformat!("<bold><red>{}</red></bold>", &args.query);
     let re = Regex::new(&args.query).unwrap();
 
     for file_path in args.file_paths {
