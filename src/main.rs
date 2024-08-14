@@ -4,6 +4,7 @@ extern crate log;
 
 use clap::Parser;
 use color_print::cformat;
+use color_print::cprintln;
 use regex::Regex;
 use std::fs;
 
@@ -15,6 +16,9 @@ struct Args {
 
     #[arg()]
     file_paths: Vec<String>,
+
+    #[arg(long)]
+    keep_going: bool,
 }
 
 fn main() {
@@ -26,16 +30,29 @@ fn main() {
     let re = Regex::new(&args.query).unwrap();
 
     for file_path in args.file_paths {
-        let text = fs::read_to_string(&file_path).expect("Failed to read file");
+        debug!("Reading '{}'...", file_path);
 
-        for (line_number, line) in text.lines().enumerate() {
-            if re.is_match(line) {
-                println!(
-                    "{}:{}| {}",
-                    file_path,
-                    line_number,
-                    re.replace_all(line, &highlight)
-                );
+        match fs::read_to_string(&file_path) {
+            Ok(text) => {
+                for (line_number, line) in text.lines().enumerate() {
+                    if re.is_match(line) {
+                        cprintln!(
+                            "<green>{}</green>:<yellow>{}</yellow>| {}",
+                            file_path,
+                            line_number,
+                            re.replace_all(line, &highlight)
+                        );
+                    }
+                }
+            }
+            _ => {
+                error!("Failed to read file '{}'", file_path);
+                if !args.keep_going {
+                    panic!(
+                        "Failed to read file '{}'. Use `--keep_going` to be lenient on errors.",
+                        file_path
+                    );
+                }
             }
         }
     }
