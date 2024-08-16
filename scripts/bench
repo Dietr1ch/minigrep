@@ -4,8 +4,14 @@ set -l WARMUP 10
 set -l QUERY "main"
 set -l FILES "src/main.rs"
 
+# Build tools
+cargo build --release --bin 'minigrep'
+cargo build --release --bin 'milligrep'
+
 # List of tools to test
 set -l -a TOOLS "./target/release/minigrep"
+set -l -a TOOLS "./target/release/milligrep"
+# System tools
 set -l -a TOOLS "$(which grep) --color"
 set -l -a TOOLS "$(which grep)"
 
