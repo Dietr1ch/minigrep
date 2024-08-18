@@ -2,7 +2,12 @@
 
 set -l WARMUP 10
 set -l QUERY "main"
-set -l FILES "src/main.rs"
+set -l -a FILES "src/main.rs"
+set -l -a FILES "src/main.rs"
+set -l -a FILES "src/main.rs"
+set -l -a FILES "src/main.rs"
+set -l -a FILES "src/main.rs"
+set -l -a FILES "src/main.rs"
 
 # Build tools
 cargo build --release --bin 'minigrep'
