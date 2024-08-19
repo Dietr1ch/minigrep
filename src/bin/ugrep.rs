@@ -21,6 +21,12 @@ struct Args {
     file_paths: Vec<Box<Path>>,
 }
 
+// How to beat this with Iterators?
+//
+// This should generate no temporary duplication, unlike iterator-based approach
+// which forces duplicating locals from the outer loop.
+//
+// To be fair, ugrep doesn't beat minigrep by a lot.
 fn main() {
     pretty_env_logger::init();
     let args = Args::parse();
