@@ -6,7 +6,9 @@ use clap::Parser;
 use color_print::cformat;
 use color_print::cprintln;
 use regex::Regex;
+use std::boxed::Box;
 use std::fs::read_to_string;
+use std::path::Path;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -14,9 +16,8 @@ struct Args {
     #[arg()]
     query: String,
 
-    // file_paths: Vec<Path>,
     #[arg()]
-    file_paths: Vec<String>,
+    file_paths: Vec<Box<Path>>,
 
     #[arg(long)]
     keep_going: bool,
@@ -37,14 +38,14 @@ fn main() {
                 .unwrap() // Error handling?
                 .lines()
                 .enumerate()
-                .map(|l| (String::from(filename), l.0, String::from(l.1)))
-                .collect::<Vec<(String, usize, String)>>()
+                .map(|l| (filename.as_ref(), l.0, String::from(l.1)))
+                .collect::<Vec<(&Path, usize, String)>>()
         })
         .filter(|l| re.is_match(&l.2))
         .for_each(|(filename, line_number, line)| {
             cprintln!(
                 "<green>{}</green>:<yellow>{}</yellow>| {}",
-                filename,
+                &filename.display(),
                 line_number,
                 re.replace_all(&line, &highlight)
             );
