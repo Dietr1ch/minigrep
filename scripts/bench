@@ -12,10 +12,12 @@ set -l -a FILES "src/main.rs"
 # Build tools
 cargo build --release --bin 'minigrep'
 cargo build --release --bin 'milligrep'
+cargo build --release --bin 'ugrep'
 
 # List of tools to test
 set -l -a TOOLS "./target/release/minigrep"
 set -l -a TOOLS "./target/release/milligrep"
+set -l -a TOOLS "./target/release/ugrep"
 # System tools
 set -l -a TOOLS "$(which grep) --color"
 set -l -a TOOLS "$(which grep)"
