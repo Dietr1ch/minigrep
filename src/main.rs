@@ -11,15 +11,19 @@ use std::path::Path;
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
+    /// The search query.
     #[arg()]
     query: String,
 
+    /// Whether to continue after some of the file_paths fail to read.
     #[arg()]
     file_paths: Vec<Box<Path>>,
 
+    /// Whether to continue after some of the file_paths fail to read.
     #[arg(long)]
     keep_going: bool,
 
+    /// Whether to use rayon to process file_paths in parallel.
     #[arg(long)]
     use_rayon: bool,
 }
@@ -60,7 +64,8 @@ fn single_thread(args: &Args, re: &Regex, highlight: &str) {
     }
 }
 
-const MAX_SINGLE_THREAD_FILES: usize = 50;
+/// The maximum number of files to process with a single thread.
+const MAX_FILES_UNDER_SINGLE_THREAD: usize = 50;
 
 fn main() {
     pretty_env_logger::init();
@@ -70,7 +75,7 @@ fn main() {
     let highlight = cformat!("<bold><red>{}</red></bold>", &args.query);
     let re = Regex::new(&args.query).unwrap();
 
-    let use_rayon = args.use_rayon || args.file_paths.len() > MAX_SINGLE_THREAD_FILES;
+    let use_rayon = args.use_rayon || args.file_paths.len() > MAX_FILES_UNDER_SINGLE_THREAD;
     if !use_rayon {
         single_thread(&args, &re, &highlight);
     } else {
